@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include <ios>
+#include <array>
 
 int main(int argc, char* argv[]) {
 
@@ -18,7 +19,6 @@ int main(int argc, char* argv[]) {
 		std::cout << "\n - Divide : /";
 		std::cout << "\n - Add: +";
 		std::cout << "\n - Subtract : -";
-		std::cout << "\n - Modulus : %";
 		std::cout << "\n\nWhat would you like to do?\n 1. Perform Calculation\n 2. Exit Calculator\n" << std::endl;
 
 		std::cin >> operation;
@@ -34,28 +34,44 @@ int main(int argc, char* argv[]) {
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			std::getline(std::cin, calcText);
 
-			size_t idx = 0;
-			std::string delimiter = " ";
+			char operation = 'n';
+			double operands[2] = {0,0};
+			int operandIdx = 0;
 
-			char operation;
-			double firstOperand;
-			double secondOperand;
+			std::stringstream ss(calcText);
+			std::string component;
 
-			while (idx = calcText.find(' ', 0) != std::string::npos) {
-				if (calcText.substr(0, idx) != delimiter) {
-
+			while (ss >> component) {
+				if ( std::isdigit(component[0]) ) {
+					operands[operandIdx] = atof(component.c_str());
+					operandIdx++;
 				}
-				std::cout << calcText.substr(0, idx) << std::endl;
-				calcText.erase(0, idx + 1);
-				//idx = calcText.find(' ');
-				
-				
+				else {
+					operation = component[0];
+				}
 			}
 			
-			std::cout << calcText << std::endl;
-			std::cout << atof(" ") << std::endl;
-			std::cout << atof("1.1") << std::endl;
+			double calcReturn;
+			switch (operation)
+			{
+			case 'x':
+				calcReturn = operands[0] * operands[1];
+				break;
+			case '/':
+				calcReturn = operands[0] / operands[1];
+				break;
+			case '+':
+				calcReturn = operands[0] + operands[1];
+				break;
+			case '-':
+				calcReturn = operands[0] - operands[1];
+				break;
+			default:
+				calcReturn = 0.0;
+				break;
+			}
 
+			std::cout << "Calculation of " << operands[0] << " " << operation << " " << operands[1] << " = " << calcReturn << std::endl;
 			break;
 		}
 		case 2: {
